@@ -1,0 +1,30 @@
+version: "3"
+services:
+  nginx:
+    container_name: wordpress-nginx
+    image: wordpress-nginx:v01
+    ports:
+      - "80:80"
+    volumes:
+      - "./webdata/wordpress:/code/wordpress"
+      - "./nginx/log:/var/log/nginx"
+    depends_on:
+      - nginx-php
+  nginx-php:
+    container_name: wordpress-php
+    image: php-fpm71:v01
+    ports:
+      - "9000"
+    volumes:
+      - "./webdata:/code"
+  mariadb:
+    container_name: wordpress-mariadb
+    image: mariadb:latest
+    volumes:
+      - "./mysql/mysqldata:/var/lib/mysql"
+    environment:
+      - "MYSQL_ROOT_PASSWORD=123456"
+      - "MYSQL_ROOT_HOST=%"
+      - "MYSQL_DATABASE=wordpress"
+    ports:
+      - "3306"
